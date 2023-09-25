@@ -6,10 +6,12 @@ from . models import URL
 from .utils import generate_short_url
 from rest_framework.response import Response
 from django.shortcuts import redirect
+from rest_framework.throttling import UserRateThrottle
 
 class URLViewSet(viewsets.ModelViewSet):
     queryset = URL.objects.all()
     serializer_class = URLSerializer
+    throttle_classes = [UserRateThrottle]
 
     def perform_create(self, serializer):
         user = self.request.user

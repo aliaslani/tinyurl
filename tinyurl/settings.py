@@ -77,7 +77,29 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
+
+    # Pagination
     'COERCE_DECIMAL_TO_STRING':False,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+
+    # Authentication
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+
+    # Throttling
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',  # Anonymous users
+        'rest_framework.throttling.UserRateThrottle',  # Authenticated users
+    ],
+    
+    # Throttling rates
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/minute',  # 5 requests per minute for anonymous users
+        'user': '100/hour',   # 100 requests per hour for authenticated users
+    },
 }
 
 # Database
