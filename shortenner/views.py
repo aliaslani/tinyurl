@@ -7,13 +7,17 @@ from django.contrib.auth.models import User
 from .utils import generate_short_url
 from rest_framework.response import Response
 from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
 from rest_framework.throttling import UserRateThrottle
-
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
+    
     def get_queryset(self):
         return User.objects.filter(id=self.request.user.id)
 
@@ -59,7 +63,8 @@ class URLViewSet(viewsets.ModelViewSet):
         else:
             serializer.save(user=user)
     
-        
+    @method_decorator(cache_page(60*60*2))
+    @method_decorator(vary_on_cookie)    
     def get_queryset(self):
         return URL.objects.filter(user=self.request.user)
 
