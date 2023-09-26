@@ -9,6 +9,7 @@ class URLSerializer(serializers.ModelSerializer):
         fields = ('origin', 'shorted')
         read_only_fields = ('shorted',)
 
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

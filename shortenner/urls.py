@@ -16,5 +16,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('redirect/<str:shorted>/',URLViewSet.as_view({'get': 'redirect'})),
     path('users/', UserViewSet.as_view({'get': 'list'})),
+    path('users/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'})),
+    path('users/<int:pk>/urls/', UserViewSet.as_view({'get': 'showurls'})),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

@@ -14,6 +14,35 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.email = request.data['email']
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response({'status': 'deleted'})
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def showurls(self, request, *args, **kwargs):
+        instance = self.get_object()
+        urls = URL.objects.filter(user=instance)
+        serializer = URLSerializer(urls, many=True)
+        return Response(serializer.data)
+
 
 
 class URLViewSet(viewsets.ModelViewSet):
@@ -50,6 +79,11 @@ class URLViewSet(viewsets.ModelViewSet):
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response({'status': 'deleted'})
 
     @action(detail=True, methods=['GET'])
     def redirect(self, request, shorted):
