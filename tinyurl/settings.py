@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -97,8 +96,8 @@ REST_FRAMEWORK = {
     
     # Throttling rates
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '5/minute',  # 5 requests per minute for anonymous users
-        'user': '100/hour',   # 100 requests per hour for authenticated users
+        'anon': '1000/minute',  # 100 requests per minute for anonymous users
+        'user': '1000/hour',   # 200 requests per hour for authenticated users
     },
 }
 
@@ -112,7 +111,12 @@ DATABASES = {
     }
 }
 
-
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+#         'LOCATION': '127.0.0.1:11211',  # Memcached server location
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 

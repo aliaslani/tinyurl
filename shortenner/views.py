@@ -1,12 +1,20 @@
 from rest_framework import viewsets
-from .serializers import URLSerializer
+from .serializers import URLSerializer, UserSerializer
 from hashlib import md5
 from rest_framework.decorators import action
-from . models import URL
+from .models import URL
+from django.contrib.auth.models import User
 from .utils import generate_short_url
 from rest_framework.response import Response
 from django.shortcuts import redirect
 from rest_framework.throttling import UserRateThrottle
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 
 class URLViewSet(viewsets.ModelViewSet):
     queryset = URL.objects.all()
