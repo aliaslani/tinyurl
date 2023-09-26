@@ -63,13 +63,13 @@ class URLViewSet(viewsets.ModelViewSet):
         else:
             serializer.save(user=user)
     
-    @method_decorator(cache_page(60*60*2))
-    @method_decorator(vary_on_cookie)    
     def get_queryset(self):
         return URL.objects.filter(user=self.request.user)
 
 
 
+    @method_decorator(cache_page(60*60*2))
+    @method_decorator(vary_on_cookie)    
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.origin = instance.origin.replace('http://', '')
@@ -85,10 +85,11 @@ class URLViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    def delete(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.delete()
-        return Response({'status': 'deleted'})
+    def destroy(self, request, *args, **kwargs):
+        if URL.objects.filter(id=kwargs['pk'], user=request.user).exists():
+            return Response({'error': 'You can not delete this url'})
+        else:
+            return super().destroy(request, *args, **kwargs)
 
     @action(detail=True, methods=['GET'])
     def redirect(self, request, shorted):
