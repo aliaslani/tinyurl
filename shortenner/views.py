@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import permissions
-from .serializers import URLSerializer, UserSerializer
+from .serializers import URLSerializer, UserSerializer, MyTokenObtainPairSerializer
 from hashlib import md5
 from rest_framework.decorators import action
 from .models import URL
@@ -13,6 +13,13 @@ from rest_framework.throttling import UserRateThrottle
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
 from django.contrib.auth.hashers import make_password
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+    
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
