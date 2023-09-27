@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from rest_framework.throttling import UserRateThrottle
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
+from django.contrib.auth.hashers import make_password
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -41,7 +42,12 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response({'status': 'deleted'})
 
     def perform_create(self, serializer):
-        serializer.save()
+        if ('password' in self.request.data):
+            password = make_password(self.request.data['password'])
+            serializer.save(password=password)
+        else:
+            serializer.save()
+
 
     def showurls(self, request, *args, **kwargs):
         instance = self.get_object()
