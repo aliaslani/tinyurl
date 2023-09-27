@@ -7,10 +7,10 @@ class URLSerializer(serializers.ModelSerializer):
     class Meta:
         model = URL
         fields = ('origin', 'shorted')
-        read_only_fields = ('shorted',)
+        read_only_fields = ('shorted','user')
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'is_staff')
+        fields = ('id', 'first_name','last_name', 'username', 'password', 'email', 'is_staff', 'groups')
