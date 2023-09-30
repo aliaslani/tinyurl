@@ -42,6 +42,7 @@ urlpatterns = [
    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
    path('api/', include(('shortenner.urls', 'shortenner'), namespace='shortenner')),
    path('api-auth/', include('rest_framework.urls')),
+   path('auth/', include('djoser.urls')),
    
   
 

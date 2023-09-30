@@ -22,45 +22,23 @@ class MyTokenObtainPairSerializer(TokenObtainPairView):
     
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-    
-    def get_queryset(self):
-        return User.objects.filter(id=self.request.user.id)
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.email = request.data['email']
-        instance.save()
-        serializer = self.get_serializer(instance)
+
+        # if 'password' in request.data:
+        #     request.data['password'] = instance.set_password(request.data['password'])
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        if 'password' in request.data:
+            instance.set_password(request.data['password'])
+            instance.save()
+        self.perform_update(serializer)
         return Response(serializer.data)
 
-    def delete(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.delete()
-        return Response({'status': 'deleted'})
-
-    def perform_create(self, serializer):
-        if ('password' in self.request.data):
-            password = make_password(self.request.data['password'])
-            serializer.save(password=password)
-        else:
-            serializer.save()
-
-
-    def showurls(self, request, *args, **kwargs):
-        instance = self.get_object()
-        urls = URL.objects.filter(user=instance)
-        serializer = URLSerializer(urls, many=True)
-        return Response(serializer.data)
 
 
 
@@ -78,9 +56,6 @@ class URLViewSet(viewsets.ModelViewSet):
             serializer.save(user=user, shorted=shorted)
         else:
             serializer.save(user=user)
-    
-    def get_queryset(self):
-        return URL.objects.filter(user=self.request.user)
 
 
 
@@ -94,22 +69,10 @@ class URLViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.origin = request.data['origin']
-        instance.save()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
 
-    def destroy(self, request, *args, **kwargs):
-        if URL.objects.filter(id=kwargs['pk'], user=request.user).exists():
-            return Response({'error': 'You can not delete this url'})
-        else:
-            return super().destroy(request, *args, **kwargs)
-
-    @action(detail=True, methods=['GET'])
-    def redirect(self, request, shorted):
-        instance = URL.objects.get(shorted=shorted)
+    @action(detail=True, methods=['GET'],url_path="redirect")
+    def redirect(self, request, pk):
+        instance = URL.objects.filter(shorted=pk).first()
         print('origin',instance.origin)
         return redirect(instance.origin)
 

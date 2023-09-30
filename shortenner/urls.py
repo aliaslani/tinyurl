@@ -16,8 +16,6 @@ router.register('users', UserViewSet,basename="users")
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('redirect/<str:shorted>/',URLViewSet.as_view({'get': 'redirect'})),
-    path('users/<int:pk>/urls/', UserViewSet.as_view({'get': 'showurls'})),
     path('token/', MyTokenObtainPairSerializer.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

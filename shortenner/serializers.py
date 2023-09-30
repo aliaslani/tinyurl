@@ -26,4 +26,11 @@ class URLSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'first_name','last_name', 'username', 'password', 'email', 'is_staff', 'groups')
+        fields = ('id', 'first_name','last_name', 'username', 'email', 'is_staff', 'groups')
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
+    def get_first_name(self, obj):
+        if len(obj.first_name) == 0:
+            raise rest_framework.exceptions.ValidationError("First name is required")
+        return obj.first_name
