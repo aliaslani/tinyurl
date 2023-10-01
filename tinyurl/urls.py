@@ -43,6 +43,7 @@ urlpatterns = [
    path('api/', include(('shortenner.urls', 'shortenner'), namespace='shortenner')),
    path('api-auth/', include('rest_framework.urls')),
    path('auth/', include('djoser.urls')),
+   path('__debug__/', include('debug_toolbar.urls')),
    
   
 
