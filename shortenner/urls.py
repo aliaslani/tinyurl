@@ -1,14 +1,10 @@
-
-from rest_framework import routers, serializers, viewsets
 from django.urls import path, include
-from django.contrib.auth.models import User
-from .views import UserViewSet, URLViewSet, MyTokenObtainPairSerializer
+from rest_framework import routers
 from rest_framework_simplejwt.views import (
-      TokenRefreshView,
-   )
+    TokenRefreshView,
+)
 
-
-
+from .views import UserViewSet, URLViewSet, MyTokenObtainPairSerializer
 
 router = routers.DefaultRouter()
 router.register('urls', URLViewSet,basename="urls")

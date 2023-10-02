@@ -24,6 +24,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    throttle_classes = [UserRateThrottle]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def update(self, request, *args, **kwargs):

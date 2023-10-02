@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_bw7+*02bm&q&i))&8!b#ra$z6evivbugf6gv9f02l4mzcyt!v'
+SECRET_KEY = "django-insecure-_bw7+*02bm&q&i))&8!b#ra$z6evivbugf6gv9f02l4mzcyt!v"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -77,7 +77,7 @@ REST_FRAMEWORK = {
     ],
 
     # Pagination
-    'COERCE_DECIMAL_TO_STRING':False,
+    'COERCE_DECIMAL_TO_STRING': False,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 
@@ -96,8 +96,8 @@ REST_FRAMEWORK = {
     
     # Throttling rates
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '1000/minute',  # 100 requests per minute for anonymous users
-        'user': '1000/hour',   # 200 requests per hour for authenticated users
+        'anon': '5/minute',  # 5 requests per minute for anonymous users
+        'user': '20/hour',   # 20 requests per hour for authenticated users
     },
 }
     
@@ -155,7 +155,7 @@ DATABASES = {
 CACHES = {
     'default': {
         "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        'LOCATION':'127.0.0.1:11211',
+        'LOCATION': '127.0.0.1:11211',
     }
 }
 # Password validation
